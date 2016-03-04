@@ -22,7 +22,8 @@ class User:
         self.weight = 0
         self.height = 0
         self.uid = ''
-        self.sex = 1  # 1 for male
+        self.sex = 1  # 1 for male, 2 for sex
+        self.endpoint = constant.Endpoint('')
 
     def login(self):
         """
@@ -45,6 +46,20 @@ class User:
             self.uid = user_data['uName']
             self.sex = user_data['sex']
             self.header['authCode'] = user_data['authCode']
+            self.endpoint = constant.Endpoint(user_data['authCode'])
         elif response['code'] == '7':
             # Wrong credential
             raise exception.CredentialError(self.username)
+        # currently edooon doesn't check client token, so the lines commented out below are totally useless.
+        # payload = {'token': constant.client_token}
+        # token_request = requests.post(self.endpoint.user_token, headers=self.header, data=json.dumps(payload))
+
+    def modify_info(self, new_info_dict):
+        for key in new_info_dict:
+            payload = {key: new_info_dict[key]}
+            modify_request = requests.post(self.endpoint.update_info, headers=self.header, data=json.dumps(payload))
+            # Actually edooon doesn't validate anything. Checks below are here just in case of other errors.
+            if json.loads(modify_request.text)['code'] == '0':
+                pass
+            else:
+                raise exception.ServerError(self.endpoint.update_info)
