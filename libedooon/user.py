@@ -54,12 +54,26 @@ class User:
         # payload = {'token': constant.client_token}
         # token_request = requests.post(self.endpoint.user_token, headers=self.header, data=json.dumps(payload))
 
+    def get_info(self):
+        payload = {}
+        update_request = requests.post(self.endpoint.get_info, headers=self.header, data=json.dumps(payload))
+        response = json.loads(update_request.text)
+        if response['code'] == '0':
+            new_info = response['message']
+            self.cell_phone = new_info['mobile']
+            self.nickname = new_info['nickName']
+            self.height = new_info['height']
+            self.weight = new_info['weight']
+            self.sex = new_info['sex']
+        else:
+            raise exception.ServerError(self.endpoint.get_info)
+
     def modify_info(self, new_info_dict):
         for key in new_info_dict:
             payload = {key: new_info_dict[key]}
             modify_request = requests.post(self.endpoint.update_info, headers=self.header, data=json.dumps(payload))
             # Actually edooon doesn't validate anything. Checks below are here just in case of other errors.
             if json.loads(modify_request.text)['code'] == '0':
-                pass
+                self.get_info()
             else:
                 raise exception.ServerError(self.endpoint.update_info)

@@ -21,3 +21,4 @@ class Endpoint:
     def __init__(self, auth_code):
         self.user_token = self.base + '/clientInterface/v1_1/user/{}/usertoken'.format(auth_code)
         self.update_info = self.base + '/commInterface/v1/user/userUpdate'
+        self.get_info = self.base + '/commInterface/v1/user/userInfo'
