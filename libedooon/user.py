@@ -77,3 +77,24 @@ class User:
                 self.get_info()
             else:
                 raise exception.ServerError(self.endpoint.update_info)
+
+    def get_map_offset(self, latitude, longitude, sport_type=0):
+        """
+        Get map offset based on current location.
+        :param latitude:
+        :param longitude:
+        :param sport_type:
+        :return:
+        """
+        map_offset = {}
+        payload = {'type': sport_type, 'longitude': longitude, 'latitude': latitude}
+        map_offset_request = requests.post(self.endpoint.get_map_offset,
+                                           headers=self.header,
+                                           data=json.dumps(payload))
+        response = json.loads(map_offset_request.text)
+        if response['code'] == '0':
+            map_offset['lat'] = response['message']['latoffset']
+            map_offset['lon'] = response['message']['lngoffset']
+            return map_offset
+        else:
+            raise exception.ServerError(self.endpoint.get_map_offset)
