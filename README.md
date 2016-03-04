@@ -1,5 +1,5 @@
 # libedooon
-A Python warp of Edooon RESTful API.
+A Python wrap of Edooon RESTful API.
 
 ## Disclaimer
 

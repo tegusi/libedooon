@@ -23,3 +23,4 @@ class Endpoint:
         self.update_info = self.base + '/commInterface/v1/user/userUpdate'
         self.get_info = self.base + '/commInterface/v1/user/userInfo'
         self.get_map_offset = self.base + '/commInterface/v1/lbs/mapoffset'
+        self.post_comment = self.base + '/clientInterface/v1_1/sport/{}/postComment'.format(auth_code)

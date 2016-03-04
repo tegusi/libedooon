@@ -98,3 +98,14 @@ class User:
             return map_offset
         else:
             raise exception.ServerError(self.endpoint.get_map_offset)
+
+    def post_comment(self, activity_id, text):
+        payload = {'comment': text, 'id': activity_id, 'feedbackid': 0}
+        comment_request = requests.post(self.endpoint.post_comment,
+                                        headers=self.header,
+                                        data=json.dumps(payload))
+        response = json.loads(comment_request.text)
+        if response['code'] == '0':
+            return response['message']['feedbackid']
+        else:
+            raise exception.ServerError(self.endpoint.post_comment)
