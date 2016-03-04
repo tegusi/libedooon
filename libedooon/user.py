@@ -109,3 +109,14 @@ class User:
             return response['message']['feedbackid']
         else:
             raise exception.ServerError(self.endpoint.post_comment)
+
+    def new_activity(self, activity):
+        payload = {'reportHistory': [activity.to_dict()]}
+        activity_request = requests.post(self.endpoint.new_activity,
+                                         headers=self.header,
+                                         data=json.dumps(payload))
+        response = json.loads(activity_request.text)
+        if response['code'] == '0':
+            return response['message']['ids'][0]
+        else:
+            raise exception.ServerError(self.endpoint.new_activity)

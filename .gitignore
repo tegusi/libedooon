@@ -1,6 +1,9 @@
 # PyCharm
 .idea
 
+# Test file
+libedooon/input.gpx
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
