@@ -120,3 +120,18 @@ class User:
             return response['message']['ids'][0]
         else:
             raise exception.ServerError(self.endpoint.new_activity)
+
+    @classmethod
+    def register(cls, email, nickname, password, user_type=1):
+        payload = {'email': email,
+                   'passwd': password,
+                   'nickName': nickname,
+                   'userType': user_type}
+        register_request = requests.post(constant.Endpoint.register,
+                                         headers=constant.default_header,
+                                         data=json.dumps(payload))
+        response = json.loads(register_request.text)
+        if response['code'] == '0':
+            return cls(email, password)
+        else:
+            raise exception.ServerError(constant.Endpoint.register)
