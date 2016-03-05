@@ -1,7 +1,7 @@
 import requests
 import json
-from . import constant
-from . import exception
+from libedooon import constant
+from libedooon import exception
 
 
 class User:
@@ -68,15 +68,26 @@ class User:
         else:
             raise exception.ServerError(self.endpoint.get_info)
 
-    def modify_info(self, new_info_dict):
-        for key in new_info_dict:
-            payload = {key: new_info_dict[key]}
+    def modify_info(self, sex=None, height=None, weight=None, nickname=None):
+        def post_modify_request(payload):
             modify_request = requests.post(self.endpoint.update_info, headers=self.header, data=json.dumps(payload))
             # Actually edooon doesn't validate anything. Checks below are here just in case of other errors.
             if json.loads(modify_request.text)['code'] == '0':
                 self.get_info()
             else:
                 raise exception.ServerError(self.endpoint.update_info)
+        if sex:
+            payload = {'sex': sex}
+            post_modify_request(payload)
+        if height:
+            payload = {'height': height}
+            post_modify_request(payload)
+        if weight:
+            payload = {'weight': weight}
+            post_modify_request(payload)
+        if nickname:
+            payload = {'nickName': nickname}
+            post_modify_request(payload)
 
     def get_map_offset(self, latitude, longitude, sport_type=0):
         """
