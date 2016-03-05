@@ -77,6 +77,10 @@ class Activity:
         self.sport_type = sport_type
 
     def to_dict(self):
+        """
+        Convert activity object into Python dictionary.
+        :return: Python dictionary ready to be dumped into json.
+        """
         result = {'longitudeOffset': self.longitude_offset,
                   'sportType': self.sport_type,
                   'maxSpeed': self.max_speed,
@@ -107,6 +111,14 @@ class Activity:
 
     @classmethod
     def from_gpx(cls, file_path, calories, latitude_offset, longitude_offset):
+        """
+        Construct an activity from .gpx file. The .gpx file must contain location, elevation and time.
+        :param file_path: path to .gpx file.
+        :param calories: integer.
+        :param latitude_offset: float number. You may get this by calling User.get_map_offset().
+        :param longitude_offset: same as latitude_offset.
+        :return: an activity object.
+        """
         input_file = open(file_path)
         gpx = gpxpy.parse(input_file)
         input_file.close()

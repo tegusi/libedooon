@@ -27,7 +27,7 @@ class User:
 
     def login(self):
         """
-        Login and retrieve an authentication code.
+        Login and set the authentication code.
         :return:
         """
         payload = {'name': self.username,
@@ -55,6 +55,10 @@ class User:
         # token_request = requests.post(self.endpoint.user_token, headers=self.header, data=json.dumps(payload))
 
     def get_info(self):
+        """
+        Get user information from server and update corresponding local attributes.
+        :return:
+        """
         payload = {}
         update_request = requests.post(self.endpoint.get_info, headers=self.header, data=json.dumps(payload))
         response = json.loads(update_request.text)
@@ -69,8 +73,16 @@ class User:
             raise exception.ServerError(self.endpoint.get_info)
 
     def modify_info(self, sex=None, height=None, weight=None, nickname=None):
-        def post_modify_request(payload):
-            modify_request = requests.post(self.endpoint.update_info, headers=self.header, data=json.dumps(payload))
+        """
+        Modify user information.
+        :param sex: 1 for male and 2 for female.
+        :param height: an integer.
+        :param weight: an integer.
+        :param nickname: an short string.
+        :return:
+        """
+        def post_modify_request(info_dict):
+            modify_request = requests.post(self.endpoint.update_info, headers=self.header, data=json.dumps(info_dict))
             # Actually edooon doesn't validate anything. Checks below are here just in case of other errors.
             if json.loads(modify_request.text)['code'] == '0':
                 self.get_info()
@@ -92,10 +104,10 @@ class User:
     def get_map_offset(self, latitude, longitude, sport_type=0):
         """
         Get map offset based on current location.
-        :param latitude:
-        :param longitude:
-        :param sport_type:
-        :return:
+        :param latitude: current latitude
+        :param longitude: current longitude
+        :param sport_type: default to 0 (run)
+        :return: a dictionary {'lat', 'lon'}
         """
         map_offset = {}
         payload = {'type': sport_type, 'longitude': longitude, 'latitude': latitude}
@@ -111,6 +123,12 @@ class User:
             raise exception.ServerError(self.endpoint.get_map_offset)
 
     def post_comment(self, activity_id, text):
+        """
+        Post a comment to a specified activity.
+        :param activity_id: an integer.
+        :param text: string.
+        :return: message feedback id.
+        """
         payload = {'comment': text, 'id': activity_id, 'feedbackid': 0}
         comment_request = requests.post(self.endpoint.post_comment,
                                         headers=self.header,
@@ -122,6 +140,11 @@ class User:
             raise exception.ServerError(self.endpoint.post_comment)
 
     def new_activity(self, activity):
+        """
+        Post a new activity.
+        :param activity: an Activity object.
+        :return: activity ID
+        """
         payload = {'reportHistory': [activity.to_dict()]}
         activity_request = requests.post(self.endpoint.new_activity,
                                          headers=self.header,
@@ -134,6 +157,14 @@ class User:
 
     @classmethod
     def register(cls, email, nickname, password, user_type=1):
+        """
+
+        :param email: a string
+        :param nickname: a short string
+        :param password: a string
+        :param user_type: default to 1
+        :return: a newly created user object.
+        """
         payload = {'email': email,
                    'passwd': password,
                    'nickName': nickname,
