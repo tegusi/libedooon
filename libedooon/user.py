@@ -1,7 +1,7 @@
 import requests
 import json
-import constant
-import exception
+from . import constant
+from . import exception
 
 
 class User:
