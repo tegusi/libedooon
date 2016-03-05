@@ -10,7 +10,7 @@ pip3 install libedooon
 
 ## Usage
 
-For API definition, please refer to doc strings.
+Please refer to [project wiki](https://github.com/yangl1996/libedooon/wiki).
 
 ## Disclaimer
 
