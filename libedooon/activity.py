@@ -110,10 +110,11 @@ class Activity:
         return result
 
     @classmethod
-    def from_gpx(cls, file_path, calories, latitude_offset, longitude_offset):
+    def from_gpx(cls, file_path, activity_start_time, calories, latitude_offset, longitude_offset):
         """
         Construct an activity from .gpx file. The .gpx file must contain location, elevation and time.
         :param file_path: path to .gpx file.
+        :param activity_start_time: start time to be submitted, Python datetime object. You should use UTC time.
         :param calories: integer.
         :param latitude_offset: float number. You may get this by calling User.get_map_offset().
         :param longitude_offset: same as latitude_offset.
@@ -137,6 +138,8 @@ class Activity:
         min_speed = 1000000.0
         max_height = 0.0
         min_height = 1000000.0
+
+        time_offset = unix_time(activity_start_time) - start_time
 
         for point in point_list:
             leg_length = haversine(last_longitude, last_latitude, point.longitude, point.latitude)
@@ -170,8 +173,8 @@ class Activity:
         duration = end_time - start_time
         avg_speed = distance / duration * 3.6
 
-        result = cls(start_time=start_time,
-                     end_time=end_time,
+        result = cls(start_time=start_time + time_offset,
+                     end_time=end_time + time_offset,
                      latitude_offset=latitude_offset,
                      longitude_offset=longitude_offset,
                      calories=calories,
