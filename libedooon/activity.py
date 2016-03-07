@@ -149,7 +149,7 @@ class Activity:
 
             duration = unix_time(point.time) - start_time
             if duration != last_duration:
-                speed = leg_length / (duration - last_duration) * 3.6
+                speed = leg_length / (duration - last_duration) * 3600
             else:
                 speed = 0.0
             last_duration = duration
@@ -171,7 +171,7 @@ class Activity:
                           'distance_covered': distance})
 
         duration = end_time - start_time
-        avg_speed = distance / duration * 3.6
+        avg_speed = distance / duration * 3600
 
         result = cls(start_time=start_time + time_offset,
                      end_time=end_time + time_offset,
