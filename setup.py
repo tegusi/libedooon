@@ -7,14 +7,14 @@ except ImportError:
 setup(
     name='libedooon',
     packages=['libedooon'],
-    version='0.2.1',
+    version='0.2.2',
     description='A Python wrap for Edooon RESTful APIs.',
     author='Lei Yang',
     author_email='yltt1234512@gmail.com',
     url='https://github.com/yangl1996/libedooon',
     keywords=['api', 'library'],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: MIT License',
