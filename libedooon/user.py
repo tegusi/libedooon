@@ -45,7 +45,7 @@ class User:
             self.height = user_data['height']
             self.uid = user_data['uName']
             self.sex = user_data['sex']
-            self.header['authCode'] = user_data['authCode']
+            self.header['authCode'] = str(user_data['authCode'])
             self.endpoint = constant.Endpoint(user_data['authCode'])
         elif response['code'] == '7':
             # Wrong credential
